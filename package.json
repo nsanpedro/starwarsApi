@@ -1,0 +1,17 @@
+{
+  "name": "starwars-api",
+  "version": "0.0.1",
+  "description": "little app to consume a list of characters from starwars universe",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "express": "^4.13.3",
+    "helmet": "^0.13.0",
+    "node-notifier": "^4.3.1"
+  }
+}
