@@ -1,30 +1,34 @@
 $(document).ready(function() {
   $(".getCharacters").click(function() {
 
-    $.get("/characters", function(data) {
-      data = JSON.parse(data);
-      data.results.forEach(function(character, index) {
-        var listItem = $('<li></li>');
-        var info = "" +
-          "name: " + character.name +
-          "height: " + character.height +
-          "mass: " + character.mass +
-          "hair color: " + character.hair_color +
-          "skin color: " + character.skin_color +
-          "eye color: " + character.eye_color +
-          "birth year: " + character.birth_year +
-          "gender: " + character.gender;
-        listItem.text(info);
 
+    $.get("/characters", function(data) {
+      console.dir(data);
+      
+      $(".character-list").empty();
+      data.forEach(function(character, index) {
+        var listItem = $('<li></li>');
+        var btnEliminar = '<button class="eliminar" id="'+character._id+'">Eliminar</button>';
+        
+
+        listItem.text(character.name);
+        listItem.append(btnEliminar);
         listItem.addClass('collection-item');
 
-        $(".character-list").empty();
+        
         $(".character-list").append(listItem);
       });
+      $(".eliminar").click(function() {
+        var idEliminar = $(this.id);
+    console.log("apreta boton eliminar" );
+  });
     });
 
   });
+  
+
 });
+
 
 //GET
 // $.get("test.php",function(data){

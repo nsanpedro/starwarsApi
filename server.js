@@ -1,20 +1,49 @@
 var express = require('express'),
   helmet = require('helmet'),
   notifier = require('node-notifier'),
-  fs = require('fs');
+  MongoClient = require('mongodb').MongoClient,
+  bodyParser = require('body-parser');
+  
 
 var app = express();
 
 app.use(helmet());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static('public'));
 
-app.get('/characters', function(req, res) {
-  fs.readFile('characters.json', 'utf8', function(err, data) {
-    if (err) throw err;
-    res.write(data);
-    res.end();
+var url = 'mongodb://localhost:27017/default';
+
+
+MongoClient.connect(url, function(err,db) {
+  if(err){
+    console.error(err);
+    process.exit(1);
+  }
+  console.log("Connected correctly to mongodb");
+  app.get("/characters",function(req, res){
+    var collection = db.collection('documents');
+    collection.find({}).toArray(function(err, result) {
+      if(err){
+        res.json(err);
+      }
+      res.json(result);
+    });
   });
-});
+
+  app.post("/addCharacters",function(req, res){
+    console.dir(req.body);
+    var collection = db.collection('documents');
+
+    collection.insert(req.body, function(err, result) {
+      if(err){
+        res.json(err);
+      }
+      res.json(result);
+    });
+  });
+    
+});    
 
 var server = app.listen(3000, function() {
   var host = server.address().address,
